@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/blok.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Brick_Block.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Brick_Block1.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/char.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/debugFont2.spritefont</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/groen.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/groen2.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiritoRight.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/testb.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/tile.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
