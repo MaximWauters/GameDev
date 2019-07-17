@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Game2
 {
-    class Hero : GameObject
+    class Hero : Jumper
     {
         public Vector2 Movement { get; set; }
         private Vector2 oldPosition;
@@ -21,19 +21,20 @@ namespace Game2
         private Animation animation;
         // 
 
-        public Hero(Texture2D texture, Vector2 position, SpriteBatch spritebatch) : base(texture, position, spritebatch)
-        {
+        public Hero(Animation animation, Vector2 position, SpriteBatch spritebatch) : base(animation, position)
+        { /*
+            animation = new Animation();
+
+            animation.AddFrame(new Rectangle(0, 0, 40, 80));
+            animation.AddFrame(new Rectangle(40, 0, 44, 80));
+            animation.AddFrame(new Rectangle(85, 0, 50, 80));
+            animation.AddFrame(new Rectangle(135, 0, 40, 80));
+
+            animation.AantalBewegingenPerSeconde = 15;
+            */
             //texture = currentAnim;
-
-            //animation = new Animation();
-
-            //animation.AddFrame(new Rectangle(0, 0, 40, 80));
-            //animation.AddFrame(new Rectangle(40, 0, 44, 80));
-            //animation.AddFrame(new Rectangle(85, 0, 50, 80));
-            //animation.AddFrame(new Rectangle(135, 0, 40, 80));
-
-            //animation.AantalBewegingenPerSeconde = 15;
         }
+
 
         public void Update(GameTime gameTime)
         {
@@ -42,9 +43,15 @@ namespace Game2
             SimulateFriction();
             MoveIfPossible(gameTime);
             StopMovingIfBlocked();
-            
-        }
 
+            if (Animation != null)
+            {
+                Animation.Position = Position;
+                if (IsHalted) Animation.SetRunDirection(Animation.runDirection.Front);
+                Animation.Update(gameTime, Position);
+            }
+        }
+        ///*
         public bool IsOnFirmGround()
         {
             Rectangle onePixelLower = Bounds;
@@ -75,9 +82,11 @@ namespace Game2
 
         private void CheckKeyboardAndUpdateMovement(GameTime gameTime)
         {
+            
             KeyboardState keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Left)) { Movement -= Vector2.UnitX * 0.8f; isMoving = true; }
-            if (keyboardState.IsKeyDown(Keys.Right)) { Movement += Vector2.UnitX * 0.8f; isMoving = true;   /* animation.Update(gameTime);  */  }
+            if (!keyboardState.IsKeyDown(Keys.Left) || !keyboardState.IsKeyDown(Keys.Left)) { Animation.SetRunDirection(Animation.runDirection.Front); }
+            if (keyboardState.IsKeyDown(Keys.Left)) { Movement -= Vector2.UnitX * 0.8f; isMoving = true; Animation.SetRunDirection(Animation.runDirection.Left); Animation.FrameCount = 4; }
+            if (keyboardState.IsKeyDown(Keys.Right)) { Movement += Vector2.UnitX * 0.8f; isMoving = true; Animation.SetRunDirection(Animation.runDirection.Right); Animation.FrameCount = 4; }
             if (keyboardState.IsKeyDown(Keys.Space) && IsOnFirmGround())
             {
                 if (!keyboardOldState.IsKeyDown(Keys.Space))
@@ -104,11 +113,16 @@ namespace Game2
         {
             Position += Movement * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 20;
         }
-        /*
+        //*/
         public override void Draw()
         {
-            SpriteBatch.Draw(Texture, Position, animation.CurrentFrame.SourceRectangle, Color.White);
+            //SpriteBatch.Draw(Texture, Position, /*animation.CurrentFrame.SourceRectangle,*/ Color.White);
+
+            if (Texture != null)
+                SpriteBatch.Draw(Texture, Position, Color.WhiteSmoke);
+            else if (Animation != null)
+                Animation.Draw();
         }
-        */
+        
     }
 }

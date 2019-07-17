@@ -42,17 +42,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animation.cs" />
-    <Compile Include="AnimationFrame.cs" />
     <Compile Include="Blok.cs" />
     <Compile Include="Camera2d.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GroenBlok.cs" />
     <Compile Include="Hero.cs" />
+    <Compile Include="HeroAnimation.cs" />
+    <Compile Include="SpriteStrip.cs" />
+    <Compile Include="Jumper.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="MovementWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

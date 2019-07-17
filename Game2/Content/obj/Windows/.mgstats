@@ -1,5 +1,2 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Brick_Block1.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/Brick_Block1.xnb","TextureProcessor","Texture2DContent",3576,16213,0
-"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/char.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/char.xnb","TextureProcessor","Texture2DContent",2705,6485,0
-"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/groen2.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/groen2.xnb","TextureProcessor","Texture2DContent",8161,16213,0
-"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiritoRight.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/kiritoRight.xnb","TextureProcessor","Texture2DContent",10265,54517,0,1226559
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/enemy2.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/enemy2.xnb","TextureProcessor","Texture2DContent",71645,455701,0,158575

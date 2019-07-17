@@ -31,3 +31,10 @@ C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\tes
 C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\Brick_Block.xnb
 C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\Brick_Block1.xnb
 C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\kiritoRight.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\TrumpAnimation.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\kirito.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\kiri2.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\kiri3.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\kiri4.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\enemy1.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\enemy2.xnb

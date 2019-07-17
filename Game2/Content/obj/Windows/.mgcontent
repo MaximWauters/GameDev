@@ -9,13 +9,27 @@
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Brick_Block1.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/char.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/debugFont2.spritefont</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/enemy1.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/enemy2.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/groen.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/groen2.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiri2.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiri3.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiri4.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kirito.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiritoRight.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/testb.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/tile.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/TrumpAnimation.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
