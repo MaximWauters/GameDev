@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Game2
 {
-    class GroenBlok : GameObject
+    class GroenBlok : SolidGameObject
     {
         public bool IsBlocked { get; set; }
         public static int TileHeight { get; private set; }
@@ -25,9 +25,14 @@ namespace Game2
         {
             // if (IsBlocked)
             //{
+
+            Bounds = new Rectangle(0, 0, 0, 0);
+
             Rectangle destinationRect = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, TileHeight);
             SpriteBatch.Draw(Texture, destinationRect, Color.White);
             //}
+
+            
         }
     }
 }

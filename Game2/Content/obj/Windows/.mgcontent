@@ -4,23 +4,22 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bk1.jpg</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/BK2.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/BK3.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/blok.png</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Brick_Block.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Brick_Block1.png</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/char.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/coin.mp3</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Coin.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/CoinScore.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/debugFont2.spritefont</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/enemy1.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/enemy2.png</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/groen.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/finish2.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/flames4.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/groen2.png</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiri2.png</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiri3.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiri4.png</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kirito.png</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiritoRight.png</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/testb.png</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/tile.png</File>
-    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/TrumpAnimation.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/menuTitle.spritefont</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/SAO3_Administrator.mp3</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
@@ -28,8 +27,7 @@
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
-    <File xsi:nil="true" />
-    <File xsi:nil="true" />
+    <File>coinCollect1.mp3</File>
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

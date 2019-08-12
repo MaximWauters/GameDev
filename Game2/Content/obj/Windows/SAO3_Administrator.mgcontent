@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/SAO3_Administrator.mp3</SourceFile>
+  <SourceTime>2019-07-21T14:03:13.6630334+02:00</SourceTime>
+  <DestFile>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/SAO3_Administrator.xnb</DestFile>
+  <DestTime>2019-08-11T14:50:30.4074406+02:00</DestTime>
+  <Importer>Mp3Importer</Importer>
+  <ImporterTime>2018-12-08T17:35:54+01:00</ImporterTime>
+  <Processor>SongProcessor</Processor>
+  <ProcessorTime>2018-12-08T17:35:54+01:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput>
+    <string>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/SAO3_Administrator.wma</string>
+  </BuildOutput>
+</PipelineBuildEvent>

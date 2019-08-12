@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/coin.mp3</SourceFile>
+  <SourceTime>2019-07-30T16:28:23.6391416+02:00</SourceTime>
+  <DestFile>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/coinCollect1.xnb</DestFile>
+  <DestTime>2019-08-11T14:50:28.5357705+02:00</DestTime>
+  <Importer>Mp3Importer</Importer>
+  <ImporterTime>2018-12-08T17:35:54+01:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2018-12-08T17:35:54+01:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

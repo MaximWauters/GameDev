@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Game2
 {
-    class Enemy : Jumper
+    class Enemy : MovingGameObject
     {
         #region Fields
         int _walkingTime = 2000;
@@ -21,16 +21,11 @@ namespace Game2
         public int Height { get; private set; }
         #endregion
 
-        public Enemy(Animation animation, Vector2 position, SpriteBatch spritebatch, float speed = 0.4f)
-            : base(animation, position)
+        public Enemy(Animation animation, Vector2 position, SpriteBatch spritebatch, float speed = 0.4f): base(animation, position)
         {
             WalkingTime = _walkingTime;
             Speed = speed;
             Movement += Vector2.UnitX * Speed;
-            //Width = texture.Width;
-            //Height = texture.Height;
-
-            //Game1.landscape.(this);
         }
 
         public void Update(GameTime gameTime, Hero player)
@@ -53,11 +48,12 @@ namespace Game2
         #region Private Fields
         private void Collision(Hero player)
         {
-            if (this.Bounds.Intersects(player.Bounds))
+            if (Bounds.Intersects(player.Bounds))
             {
                 //game1.CurrentLevel.ShouldRestartGame = true;
                 player.Position = new Vector2(1000, 70);
             }
+            
         }
         #endregion
         #region Private Methods

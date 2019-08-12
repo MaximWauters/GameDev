@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Game2
 {
-    class Hero : Jumper
+    class Hero : MovingGameObject
     {
         public Vector2 Movement { get; set; }
         private Vector2 oldPosition;
@@ -22,17 +22,8 @@ namespace Game2
         // 
 
         public Hero(Animation animation, Vector2 position, SpriteBatch spritebatch) : base(animation, position)
-        { /*
-            animation = new Animation();
+        { 
 
-            animation.AddFrame(new Rectangle(0, 0, 40, 80));
-            animation.AddFrame(new Rectangle(40, 0, 44, 80));
-            animation.AddFrame(new Rectangle(85, 0, 50, 80));
-            animation.AddFrame(new Rectangle(135, 0, 40, 80));
-
-            animation.AantalBewegingenPerSeconde = 15;
-            */
-            //texture = currentAnim;
         }
 
 
@@ -43,6 +34,7 @@ namespace Game2
             SimulateFriction();
             MoveIfPossible(gameTime);
             StopMovingIfBlocked();
+            CheckPossibleMovement();
 
             if (Animation != null)
             {
@@ -51,7 +43,15 @@ namespace Game2
                 Animation.Update(gameTime, Position);
             }
         }
-        ///*
+
+        public void CheckPossibleMovement()  // als je in een trap valt bv
+        {
+            if (Position.Y > 2000)
+            {
+                Position = new Vector2(1000, 70);
+            }
+        }
+
         public bool IsOnFirmGround()
         {
             Rectangle onePixelLower = Bounds;
@@ -76,13 +76,10 @@ namespace Game2
             oldPosition = Position;
             UpdatePositionBasedOnMovement(gameTime);
             Position = Level.CurrentBoard.WhereCanIGetTo(oldPosition, Position, Bounds);
-
-            
         }
 
         private void CheckKeyboardAndUpdateMovement(GameTime gameTime)
         {
-            
             KeyboardState keyboardState = Keyboard.GetState();
             if (!keyboardState.IsKeyDown(Keys.Left) || !keyboardState.IsKeyDown(Keys.Left)) { Animation.SetRunDirection(Animation.runDirection.Front); }
             if (keyboardState.IsKeyDown(Keys.Left)) { Movement -= Vector2.UnitX * 0.8f; isMoving = true; Animation.SetRunDirection(Animation.runDirection.Left); Animation.FrameCount = 4; }
@@ -98,7 +95,6 @@ namespace Game2
             else if (keyboardOldState.IsKeyDown(Keys.Space))
             {
                 // Key was down last update, but not now, so it has just been released
-                //isMoving = false;
             }
             keyboardOldState = keyboardState;
         }
@@ -113,16 +109,13 @@ namespace Game2
         {
             Position += Movement * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 20;
         }
-        //*/
+
         public override void Draw()
         {
-            //SpriteBatch.Draw(Texture, Position, /*animation.CurrentFrame.SourceRectangle,*/ Color.White);
-
             if (Texture != null)
                 SpriteBatch.Draw(Texture, Position, Color.WhiteSmoke);
             else if (Animation != null)
                 Animation.Draw();
         }
-        
     }
 }

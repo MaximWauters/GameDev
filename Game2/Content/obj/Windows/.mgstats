@@ -1,2 +1,17 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/enemy2.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/enemy2.xnb","TextureProcessor","Texture2DContent",71645,455701,0,158575
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bk1.jpg","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/bk1.xnb","TextureProcessor","Texture2DContent",201829,8294485,0,6817907
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/BK2.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/BK2.xnb","TextureProcessor","Texture2DContent",2009548,9437269,0,4005744
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/BK3.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/BK3.xnb","TextureProcessor","Texture2DContent",1569166,8294485,0,265496
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/blok.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/blok.xnb","TextureProcessor","Texture2DContent",1474,16469,0,0041526
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Brick_Block1.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/Brick_Block1.xnb","TextureProcessor","Texture2DContent",3576,16213,0,0049869
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/coin.mp3","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/coinCollect1.xnb","SoundEffectProcessor","SoundEffectContent",41086,271977,2,009707
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Coin.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/Coin.xnb","TextureProcessor","Texture2DContent",1584,560085,0,0409004
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/CoinScore.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/CoinScore.xnb","TextureProcessor","Texture2DContent",7784,44605,0,0123265
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/debugFont2.spritefont","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/debugFont2.xnb","FontDescriptionProcessor","SpriteFontContent",2008,21521,0,3974433
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/enemy2.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/enemy2.xnb","TextureProcessor","Texture2DContent",71645,455701,0,0215456
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/finish2.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/finish2.xnb","TextureProcessor","Texture2DContent",8830,88965,0,0072585
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/flames4.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/flames4.xnb","TextureProcessor","Texture2DContent",208919,1322137,0,0605645
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/groen2.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/groen2.xnb","TextureProcessor","Texture2DContent",8161,16213,0,0049868
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/kiri4.png","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/kiri4.xnb","TextureProcessor","Texture2DContent",42898,217813,0,0138713
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/menuTitle.spritefont","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/menuTitle.xnb","FontDescriptionProcessor","SpriteFontContent",2008,267281,0,0779494
+"C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/SAO3_Administrator.mp3","C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bin/Windows/SAO3_Administrator.xnb","SongProcessor","SongContent",2216898,136,1,22251
