@@ -10,20 +10,13 @@ namespace Game2
 {
     class Enemy : MovingGameObject
     {
-        #region Fields
-        int _walkingTime = 2000;
-        #endregion
-
-        #region Properties
-        public int WalkingTime { get; private set; }
+        //public int WalkingTime { get; private set; }
         public float Speed { get; set; }
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        #endregion
+        //public int Width { get; private set; }
+        //public int Height { get; private set; }
 
         public Enemy(Animation animation, Vector2 position, SpriteBatch spritebatch, float speed = 0.4f): base(animation, position)
         {
-            WalkingTime = _walkingTime;
             Speed = speed;
             Movement += Vector2.UnitX * Speed;
         }
@@ -33,7 +26,7 @@ namespace Game2
             Movement += Vector2.UnitX * Speed;
             AffectWithGravity();
             SimulateFriction();
-            MoveAsFarAsPossible(gameTime, true);
+            MoveAsFarAsPossible(gameTime);
             StopMovingIfBlocked();
             ChangeRunningDirectionIfBlocked();
             if (Animation != null)
@@ -45,18 +38,11 @@ namespace Game2
             Collision(player);
         }
 
-        #region Private Fields
         private void Collision(Hero player)
         {
-            if (Bounds.Intersects(player.Bounds))
-            {
-                //game1.CurrentLevel.ShouldRestartGame = true;
-                player.Position = new Vector2(1000, 70);
-            }
-            
+            if (Bounds.Intersects(player.Bounds)) player.Position = new Vector2(70, 100);  //back to startpos
         }
-        #endregion
-        #region Private Methods
+
         private void ChangeRunningDirectionIfBlocked()
         {
             if (Movement.X == 0)
@@ -67,8 +53,6 @@ namespace Game2
             {
                 Animation.SetRunDirection(Animation.runDirection.Front);
             }
-
         }
-        #endregion
     }
 }

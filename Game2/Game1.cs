@@ -16,20 +16,22 @@ namespace Game2
         public static Game1 landscape { get; set; }
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _tileTexture, _jumperTexture, _tile2Texture, _enemyTexture, _flamesTexture, _menuBackground, _finishTexture, _backTexture, _backTexture2, _coinTexture, _coinScoreTexture;
+        private Texture2D _tileTexture, _jumperTexture, _tile2Texture, _enemyTexture, _flamesTexture, _menuBackground, _endScreenBackground,_finishTexture, _backTexture, _backTexture2, _coinTexture, _coinScoreTexture, _asunaTexture, _asunaTexture2;
         private Camera2d _camera;
         private Hero _hero;
         private Coin _Coin, _Coin2, _Coin3, _Coin4, _Coin5, _Coin6;
         private Level _level1, _level2;
-        private Finish _finish;
+        private Finish _finish, _asuna1, _asuna2;
         private SpriteFont _debugFont;
         private Animation _heroAnimation, _coinAnimation, _coinAnimation2, _coinAnimation3, _coinAnimation4, _coinAnimation5, _coinAnimation6;
         private Menu _menu { get; set; }
-        private SpriteFont _font;
+        private EndScreen _theEnd { get; set; }
+        private SpriteFont _font1, _font2;
+        private SpriteFont[] menuFonts = new SpriteFont[2];
         public SoundEffect sound { get; private set; }
         public Song themeSong;
         public int lvl = 1;
-        private int s = 0;
+        private int score = 0;
         
         List<Enemy> Enemies = new List<Enemy>();
         List<Trap> Traps = new List<Trap>();
@@ -77,14 +79,25 @@ namespace Game2
             _enemyTexture = Content.Load<Texture2D>("enemy2");
             _flamesTexture = Content.Load<Texture2D>("flames4");
             _menuBackground = Content.Load<Texture2D>("bk1");
-            _font = Content.Load<SpriteFont>("menuTitle");
+            _endScreenBackground = Content.Load<Texture2D>("end");
             _finishTexture = Content.Load<Texture2D>("finish2");
             _backTexture = Content.Load<Texture2D>("BK3");
             _backTexture2 = Content.Load<Texture2D>("BK2");
             _coinTexture = Content.Load<Texture2D>("Coin");
             _coinScoreTexture = Content.Load<Texture2D>("CoinScore");
+            _asunaTexture = Content.Load<Texture2D>("Asuna2");
+            _asunaTexture2 = Content.Load<Texture2D>("Asuna3");
 
-            _menu = new Menu(_font, _menuBackground, _spriteBatch);
+            _font1 = Content.Load<SpriteFont>("menuTitle");
+            _font2 = Content.Load<SpriteFont>("Description");
+            _debugFont = Content.Load<SpriteFont>("DebugFont2");
+
+            menuFonts[0] = _font1;
+            menuFonts[1] = _font2;
+
+            //menuFonts = { _font1, _font2}  list?
+
+            _menu = new Menu(menuFonts, _menuBackground, _spriteBatch);
 
             sound = Content.Load<SoundEffect>("coinCollect1");
 
@@ -93,10 +106,9 @@ namespace Game2
             MediaPlayer.IsRepeating = true;
             MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
 
-
             _finish = new Finish(_finishTexture, _spriteBatch, new Vector2(6250, 450), 1);
-
-            
+            _asuna1 = new Finish(_asunaTexture, _spriteBatch, new Vector2(6280, 475), 1.7f);
+            _asuna2 = new Finish(_asunaTexture2, _spriteBatch, new Vector2(6280, 475), 1.7f);
 
             _coinAnimation6 = new HeroAnimation(_coinTexture, _spriteBatch, new Vector2(2880, 540), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
             _coinAnimation5 = new HeroAnimation(_coinTexture, _spriteBatch, new Vector2(1800, 600), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
@@ -106,14 +118,11 @@ namespace Game2
             _coinAnimation3 = new HeroAnimation(_coinTexture, _spriteBatch, new Vector2(250, 480), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
 
             CreateCoins();
-     
-            _debugFont = Content.Load<SpriteFont>("DebugFont2");
 
             _heroAnimation = new HeroAnimation(_jumperTexture, _spriteBatch, new Vector2(70, 100), 40, 65, 4, 90, Color.WhiteSmoke, 1.4f, true, 4, new int[] { 0, 0, 0, 0 }, 0);
             _hero = new Hero(_heroAnimation, new Vector2(70, 100), _spriteBatch);
 
             _level1 = new Level(_spriteBatch, _tileTexture, _tile2Texture, _enemyTexture, _flamesTexture, 1);
-            
         }
 
         void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
@@ -153,8 +162,11 @@ namespace Game2
 
             UpdateCoins(gameTime, _hero);   // update animatie coin
             checkCol(_hero);     // col-det voor coins
-            
-            _hero.Update(gameTime);
+                                 //_theEnd.Update(gameTime);
+
+            //if (!((_hero.Position.X > 6290) && (lvl == 2))) 
+            _hero.Update(gameTime);  // engame guard
+
             if (lvl == 1)
             {
                 _level1.UpdateTraps(gameTime, _hero);
@@ -164,7 +176,9 @@ namespace Game2
             if (lvl == 2)
             {
                 _level2.UpdateTraps(gameTime, _hero);   // afzonderlijk van lvl update pls
-                _level2.UpdateEnemies(gameTime, _hero);  
+                _level2.UpdateEnemies(gameTime, _hero);
+                _asuna1.Update(_hero);
+                _asuna2.Update(_hero);
             }
            
             base.Update(gameTime);
@@ -210,7 +224,7 @@ namespace Game2
             {
                 if (Coins[i].Bounds.Intersects(h.Bounds))
                 {
-                    s = s + 1;
+                    score++;
                     sound.Play();
                     Coins.RemoveAt(i);
                 }
@@ -232,6 +246,8 @@ namespace Game2
             _camera.Zoom = zoom;
 
             _spriteBatch.Begin(transformMatrix: viewMatrix);
+
+            bool canDraw = false;
 
             if (_menu.IsActive == true) _menu.Draw(); 
             else
@@ -256,12 +272,31 @@ namespace Game2
                     _hero.Draw();
                     DrawCoins();
                 }
+                else if (_hero.Position == Vector2.Zero) _theEnd.Draw();
                 else if (!_finish.Win == true && lvl == 2)
                 {
                     DrawBackground(_backTexture2);
                     _level2.Draw(_spriteBatch);
                     WriteDebugInfo();
+                    DrawScore();
                     _hero.Draw();
+                    _asuna1.Draw();
+                    if (_asuna1.Win == true && canDraw == false)
+                    {
+                        _asuna2.Draw();
+                        canDraw = true;
+                    }
+                }
+                if (_asuna2.Win == true && canDraw == true && _hero.Position.X > 6270)
+                {
+                    Console.WriteLine("jeps");
+                    System.Threading.Thread.Sleep(3000);
+                    _hero.Position = Vector2.Zero;
+                    _camera.Position = Vector2.Zero;
+                    GraphicsDevice.Clear(Color.WhiteSmoke);
+
+                    _theEnd = new EndScreen(menuFonts, score, _endScreenBackground, _spriteBatch);
+                    _theEnd.isActive = true;
                 }
             }
             _spriteBatch.End();
@@ -279,10 +314,10 @@ namespace Game2
         
         private void DrawScore()
         {
-            string scoreText = string.Format("{0}x", s);
+            string scoreText = string.Format("{0}x", score);
             Rectangle destRect = new Rectangle((int)(camPos.X + 1430), 70, 50, 50);
 
-            _spriteBatch.DrawString(_font, scoreText, new Vector2(camPos.X + 1330, 55), Color.Black);
+            _spriteBatch.DrawString(_font1, scoreText, new Vector2(camPos.X + 1330, 55), Color.Orange);
             _spriteBatch.Draw(_coinScoreTexture, destRect, Color.WhiteSmoke);
         }
         

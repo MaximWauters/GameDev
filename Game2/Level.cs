@@ -21,7 +21,6 @@ namespace Game2
         public HeroAnimation trapAnimation2 { get; set; }
         public HeroAnimation trapAnimation3 { get; set; }
 
-        // yey
         private Enemy enemy1 { get; set; }
         private Enemy enemy2 { get; set; }
         private HeroAnimation enemy1Animation { get; set; }
@@ -39,26 +38,22 @@ namespace Game2
 
         public SpriteBatch SpriteBatch { get; set; }
         public static Level CurrentBoard { get; private set; }
-        public int BoardHeight { get; private set; }
         public int LevelNr { get; set; }
 
         public List<Trap> traps = new List<Trap>();
-        private List<Enemy> enemies = new List<Enemy>(); //y
+        private List<Enemy> enemies = new List<Enemy>();
 
         public Level(SpriteBatch spritebatch, Texture2D tileTexture, Texture2D tile2Texture, Texture2D enemyTexture, Texture2D trapTexture, int levelNr)
         {
             TileTexture = tileTexture; // array pls
             SpriteBatch = spritebatch;
             Tile2Texture = tile2Texture;
-            LevelNr = levelNr;
-
             _enemyTexture = enemyTexture;
             _trapTexture = trapTexture;
-            //_coinTexture = coinT
+            LevelNr = levelNr;
 
             Blokken = new Blok[Columns, Rows];
 
-            //y
             enemy1Animation = new HeroAnimation(_enemyTexture, spritebatch, new Vector2(900, 550), 70, 65, 8, 200, Color.WhiteSmoke, 1.4f, true, 2, new int[] { 0, 20, 20, 0 }, 0);
             enemy2Animation = new HeroAnimation(_enemyTexture, spritebatch, new Vector2(4450, 550), 70, 65, 8, 200, Color.WhiteSmoke, 1.4f, true, 2, new int[] { 0, 20, 20, 0 }, 0);
             enemy1Animation2 = new HeroAnimation(_enemyTexture, spritebatch, new Vector2(2000, 160), 70, 65, 8, 200, Color.WhiteSmoke, 1.4f, true, 2, new int[] { 0, 20, 20, 0 }, 0);
@@ -72,13 +67,12 @@ namespace Game2
 
             Level.CurrentBoard = this;
 
-            BoardHeight = Blokken.GetLength(1) * Blok.TileHeight;
-
             if (levelNr == 2)
             {
                 traps.Clear();
                 enemies.Clear();  //clear enemies en traps van vorige level voor je nieuwe level start
                 MaakLevel2();
+                
             }
         }
 
@@ -139,13 +133,12 @@ namespace Game2
                     Vector2 tilePosition = new Vector2(x * TileTexture.Width, y * TileTexture.Height);
                     Vector2 tile2Position = new Vector2(x * Tile2Texture.Width, y * Tile2Texture.Height);
 
-                    if (LevelNr == 1)
+                    if (LevelNr == 1) // geef de tile array mee met het level
                     {
                         if (tileArray[y, x] == 1) Blokken[x, y] = new Blok(TileTexture, tilePosition, SpriteBatch, true);
-
+                        
                         if (tileArray[y, x] == 2) Blokken[x, y] = new Blok(Tile2Texture, tile2Position, SpriteBatch, false);// maak nieuwe klasse met appart blok
                     }
-
                     //
                     if (LevelNr == 2)
                     {
@@ -163,7 +156,7 @@ namespace Game2
             {
                 for (int i = 0; i < Columns; i++)
                 {
-                    if (Blokken[i, j] != null && tileArray[j, i] == 2) Blokken[i, j].IsBlocked = false;  // zorg dat je door vast object geraakt
+                   // if (Blokken[i, j] != null && tileArray[j, i] == 2) Blokken[i, j].IsBlocked = false;  // zorg dat je door vast object geraakt
 
                     if (j == 0 || i == 0 || j == Rows - 1 || i == Columns - 1) if (Blokken[i, j] != null) Blokken[i, j].IsBlocked = true;
                 }
@@ -185,7 +178,6 @@ namespace Game2
                 {
                     return false;
                 }
-                
             }
             return true;
         }
@@ -242,7 +234,7 @@ namespace Game2
             enemies.Add(enemy1);
             enemies.Add(enemy2);
         }
-        public void CreateEnemiesLvl2() //y
+        public void CreateEnemiesLvl2() 
         {
             Vector2 _enemyPosition = new Vector2(900, 550); 
             Vector2 _enemy2Position = new Vector2(4450, 550);
@@ -297,7 +289,7 @@ namespace Game2
                 }
             }
             DrawEnemies();
-            DrawTraps();
+            DrawTraps(); 
         }
     }
 }

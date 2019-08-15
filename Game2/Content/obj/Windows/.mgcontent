@@ -4,6 +4,8 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Asuna2.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Asuna3.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/bk1.jpg</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/BK2.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/BK3.png</File>
@@ -13,7 +15,9 @@
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/Coin.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/CoinScore.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/debugFont2.spritefont</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/end.jpg</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/enemy2.png</File>
+    <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/File.spritefont</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/finish2.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/flames4.png</File>
     <File>C:/Users/waute/OneDrive/Bureaublad/Game2/Game2/Content/groen2.png</File>
@@ -27,11 +31,15 @@
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File>coinCollect1.mp3</File>
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File>Description.spritefont</File>
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

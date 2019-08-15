@@ -20,15 +20,12 @@ namespace Game2
             Text = text;
             MenuItemFont = menuItemFont;
             SpriteBatch = spriteBatch;
-
         }
 
         public void Draw(bool isSelected)
         {
-            if (isSelected)
-                SpriteBatch.DrawString(MenuItemFont, Text, Position, Color.White);
-            else
-                SpriteBatch.DrawString(MenuItemFont, Text, Position, Color.Orange);
+            if (isSelected) SpriteBatch.DrawString(MenuItemFont, Text, Position, Color.White);
+            else SpriteBatch.DrawString(MenuItemFont, Text, Position, Color.Orange);
         }
     }
 }

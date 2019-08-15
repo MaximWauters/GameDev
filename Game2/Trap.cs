@@ -10,9 +10,7 @@ namespace Game2
 {
     class Trap : MovingGameObject
     {
-        #region Properties
         public float Speed { get; set; }
-        #endregion
 
         public Trap(Animation animation, Vector2 position, SpriteBatch spritebatch, float speed = 1f) : base(animation, position)
         {
@@ -22,10 +20,7 @@ namespace Game2
 
         public void Update(GameTime gameTime, Hero player)
         {
-            Movement = Vector2.UnitY * (15 + Speed);
-
             UpdatePositionBasedOnMovement(gameTime);
-
             if (Animation != null)
             {
                 Animation.Position = Position;
@@ -40,21 +35,14 @@ namespace Game2
             Collision(player);
         }
 
-        #region Private Fields
         private void Collision(Hero player)
         {
-            if (this.Bounds.Intersects(player.Bounds))
-            {
-                player.Position = new Vector2(1000, 70);
-            }
-
+            if (this.Bounds.Intersects(player.Bounds)) player.Position = new Vector2(70, 100);
         }
         
         private void UpdatePositionBasedOnMovement(GameTime gameTime)
         {
             Position += Movement * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 15;  // Elapsed time since last update
         }
-        
-        #endregion
     }
 }

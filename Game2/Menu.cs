@@ -14,6 +14,8 @@ namespace Game2
         public List<MenuItem> MenuItems { get; private set; }
         public List<MenuItem> ControlsItems { get; private set; }
 
+        //public KeyboardKeys ks { get; set; }
+
         public Vector2 MenuItemPos
         {
             get { return _menuItemPos; }
@@ -28,40 +30,49 @@ namespace Game2
         private Vector2 _menuItemPos; // hoort bij bovenstaande get en set ofc...
 
         public SpriteFont GameFont { get; private set; }
+        public SpriteFont GameFont2 { get; private set; }
+
         public Texture2D BackgroundTexture { get; private set; }
         public SpriteBatch SpriteBatch { get; private set; }
-        //public KeyboardState KeyboardState { get; private set; }
         public KeyboardState OldKeyboardState { get; private set; }
         public bool IsActive { get; set; }
-        //public int SelectedItem { get; private set; }
         public int Selection { get; private set; }
         public string MenuTitle { get; private set; }
         public string Footer { get; private set; }
-        
+        public string Description { get; private set; }
+
         public Vector2 TitlePos { get; private set; }
+        public Vector2 DescriptionPos { get; private set; }
         public Vector2 FooterPos { get; private set; }
         public Vector2 ControlsPos { get; private set; }
 
-        public Menu(SpriteFont gameFont, Texture2D backgroundTexture, SpriteBatch spriteBatch)
+        public Menu(SpriteFont[] gameFonts, Texture2D backgroundTexture, SpriteBatch spriteBatch)
         {
             BackgroundTexture = backgroundTexture;
             SpriteBatch = spriteBatch;
-            GameFont = gameFont;
+
+            GameFont = gameFonts[0];
+            GameFont2 = gameFonts[1];
+
             IsActive = true;
 
-            MenuTitle = "Kirito's Adventures"; 
+            MenuTitle = "Kirito's Adventures";
+            Description = "The objective is to advance from left to right, \ngrind trough each level, \ncollect as many coins as you can along the way \nand rescue the princess!";
             Footer = "Game by Maxim Wauters for AP hogeschool";
 
             TitlePos = new Vector2(400, 20);
-            FooterPos = new Vector2(50, 700);
+            FooterPos = new Vector2(50, 750);
+            DescriptionPos = new Vector2(410, 120);
 
-            MenuItem _playGame = new MenuItem("Play Game", gameFont, spriteBatch);
-            MenuItem _options = new MenuItem("Controls", gameFont, spriteBatch);
-            MenuItem _exitGame = new MenuItem("Exit", gameFont, spriteBatch);
+            
 
-            MenuItem _space = new MenuItem("Space Bar = Jump", gameFont, spriteBatch);
-            MenuItem _right = new MenuItem("right arrow = go right", gameFont, spriteBatch);
-            MenuItem _left = new MenuItem("left arrow = go left", gameFont, spriteBatch);
+            MenuItem _playGame = new MenuItem("Play Game", GameFont, spriteBatch);
+            MenuItem _options = new MenuItem("Controls", GameFont, spriteBatch);
+            MenuItem _exitGame = new MenuItem("Exit", GameFont, spriteBatch);
+
+            MenuItem _space = new MenuItem("Space Bar = Jump", GameFont, spriteBatch);
+            MenuItem _right = new MenuItem("Right Arrow = Go Right", GameFont, spriteBatch);
+            MenuItem _left = new MenuItem("Left Arrow = Go Left", GameFont, spriteBatch);
 
             MenuItems = new List<MenuItem>();
             ControlsItems = new List<MenuItem>();
@@ -74,24 +85,24 @@ namespace Game2
             ControlsItems.Add(_right);
             ControlsItems.Add(_left);  
         }
-
+        
         public void Update(GameTime gameTime)
         {
             KeyboardState ks = Keyboard.GetState();
             //KeyboardState prevKs = Keyboard.GetState();
 
-            if (ks.IsKeyDown(Keys.Up) && (!OldKeyboardState.Equals(ks)))
+            if (ks.IsKeyDown(Keys.Up) && !OldKeyboardState.Equals(ks))
             {
                 Selection--;
                 if (Selection < 0) Selection = 0;
             }
-            if (ks.IsKeyDown(Keys.Down) && (!OldKeyboardState.Equals(ks)))
+            if (ks.IsKeyDown(Keys.Down) && !OldKeyboardState.Equals(ks))
             {
                 Selection++;
                 if (Selection > MenuItems.Count - 1) Selection = MenuItems.Count - 1;
             }
-           
-            if (!OldKeyboardState.Equals(ks) && ks.IsKeyDown(Keys.Enter))
+
+            if (ks.IsKeyDown(Keys.Enter) && !OldKeyboardState.Equals(ks))
             {
                 switch (Selection)
                 {
@@ -99,8 +110,7 @@ namespace Game2
                         IsActive = false;
                         break;
                     case 1:
-                        // show controls in draw section...
-                        break;
+                        break; // show controls in draw section...
                     case 2:
                         Game1.landscape.Exit();
                         break;
@@ -115,10 +125,10 @@ namespace Game2
 
             foreach (MenuItem item in MenuItems)
             {
-                marge += 80;
+                marge += 100;
 
                 _menuItemPos.X = 50;
-                _menuItemPos.Y = (70 + marge);
+                _menuItemPos.Y = (120 + marge);
 
                 item.Position = MenuItemPos; 
             }
@@ -130,7 +140,7 @@ namespace Game2
 
             foreach (MenuItem item in ControlsItems)
             {
-                marge += 80;
+                marge += 60;
                 _controlsItemPos.X = 320;
                 _controlsItemPos.Y = (300 + marge);
 
@@ -150,7 +160,8 @@ namespace Game2
                 Rectangle _backgroundRect = new Rectangle(0, 0, Game1.landscape.GraphicsDevice.Viewport.Width, Game1.landscape.GraphicsDevice.Viewport.Height);
                 SpriteBatch.Draw(BackgroundTexture, _backgroundRect, Color.WhiteSmoke);
                 SpriteBatch.DrawString(GameFont, MenuTitle, TitlePos, Color.Orange);
-                SpriteBatch.DrawString(GameFont, Footer, FooterPos, Color.Orange);
+                SpriteBatch.DrawString(GameFont2, Description, DescriptionPos, Color.Aquamarine);
+                SpriteBatch.DrawString(GameFont2, Footer, FooterPos, Color.Orange);
             }
 
             if (Selection == 1)

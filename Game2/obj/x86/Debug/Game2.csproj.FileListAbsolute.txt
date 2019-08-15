@@ -41,3 +41,7 @@ C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\Coi
 C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\CoinScore.xnb
 C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\coinCollect2.wma
 C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\coinCollect1.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\Description.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\Asuna2.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\Asuna3.xnb
+C:\Users\waute\OneDrive\Bureaublad\Game2\Game2\bin\Windows\x86\Debug\Content\end.xnb

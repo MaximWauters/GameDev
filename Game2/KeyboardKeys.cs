@@ -9,35 +9,88 @@ namespace Game2
 {
     class KeyboardKeys : UserControls
     {
+       // public KeyboardState OldKeyboardState { get;  set; }
+        public KeyboardKeys()
+        {
+
+        }
+
         public override void Update()
         {
-            KeyboardState stateKey = Keyboard.GetState();
+            StateKey = Keyboard.GetState();
+            OldKeyboardState = Keyboard.GetState();
 
-            if (stateKey.IsKeyDown(Keys.Left))
+            if (StateKey.IsKeyDown(Keys.Up))
             {
-                left = true;
+                Up = true;
+                Console.WriteLine("Naar bove");
             }
-            if (stateKey.IsKeyUp(Keys.Left))
+            if (StateKey.IsKeyUp(Keys.Up))
             {
-                left = false;
+                Up = false;
+            }
+            if (StateKey.IsKeyDown(Keys.Down))
+            {
+                Console.WriteLine("Naar benede");
+                Down = true;
+            }
+            if (StateKey.IsKeyUp(Keys.Down))
+            {
+                Down = false;
+            }
+            if (OldKeyboardState.IsKeyDown(Keys.Up))
+            {
+                Up = true;
+                Console.WriteLine("Naar bove");
+            }
+            if (OldKeyboardState.IsKeyUp(Keys.Up))
+            {
+                Up = false;
+            }
+            if (OldKeyboardState.IsKeyDown(Keys.Down))
+            {
+                Console.WriteLine("Naar benede");
+                Down = true;
+            }
+            if (OldKeyboardState.IsKeyUp(Keys.Down))
+            {
+                Down = false;
             }
 
-            if (stateKey.IsKeyDown(Keys.Right))
+            if (StateKey.IsKeyDown(Keys.Left))
             {
-                right = true;
+                Left = true;
             }
-            if (stateKey.IsKeyUp(Keys.Right))
+            if (StateKey.IsKeyUp(Keys.Left))
             {
-                right = false;
+                Left = false;
             }
 
-            if (stateKey.IsKeyDown(Keys.Space))
+            if (StateKey.IsKeyDown(Keys.Right))
             {
-                space = true;
+                Right = true;
             }
-            if (stateKey.IsKeyUp(Keys.Space))
+            if (StateKey.IsKeyUp(Keys.Right))
             {
-                space = false;
+                Right = false;
+            }
+
+            if (StateKey.IsKeyDown(Keys.Enter))
+            {
+                Enter = true;
+            }
+            if (StateKey.IsKeyUp(Keys.Enter))
+            {
+                Enter = false;
+            }
+
+            if (StateKey.IsKeyDown(Keys.Space))
+            {
+                Space = true;
+            }
+            if (StateKey.IsKeyUp(Keys.Space))
+            {
+                Space = false;
             }
         }
     }

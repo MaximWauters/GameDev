@@ -11,28 +11,16 @@ namespace Game2
     class GroenBlok : SolidGameObject
     {
         public bool IsBlocked { get; set; }
-        public static int TileHeight { get; private set; }
-
-        int _tileHeight = 63; // original 63
 
         public GroenBlok(Texture2D texture, Vector2 position, SpriteBatch batch, bool isBlocked) : base(texture, position, batch)
         {
             IsBlocked = isBlocked;
-            TileHeight = _tileHeight;
         }
 
         public void Draw(SpriteBatch spritebatch)
         {
-            // if (IsBlocked)
-            //{
-
-            Bounds = new Rectangle(0, 0, 0, 0);
-
-            Rectangle destinationRect = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, TileHeight);
-            SpriteBatch.Draw(Texture, destinationRect, Color.White);
-            //}
-
-            
+            Rectangle destinationRect = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
+            SpriteBatch.Draw(Texture, destinationRect, Color.White);  
         }
     }
 }
