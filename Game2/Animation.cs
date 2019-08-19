@@ -28,7 +28,7 @@ namespace Game2
         public int Height { get; private set; }
         public virtual bool Active { get; set; }
         public bool AnimationLoop { get; set; }
-        public enum runDirection
+        public enum FrameDirection
         {
             Front,
             Right,
@@ -70,9 +70,9 @@ namespace Game2
             DestinationRect = new Rectangle((int)Position.X, (int)Position.Y, (int)(FrameWidth * Scale), (int)(FrameHeight * Scale));
         }
 
-        public void SetRunDirection(runDirection runDirection)
+        public void SetRunDirection(FrameDirection frameDirection)
         {
-            RunDirectionIndex = (int)runDirection;
+            RunDirectionIndex = (int)frameDirection;
         }
 
         private void CheckForElapsedTimeAndUpdateCurrentFrameIfNeeded(GameTime gameTime)

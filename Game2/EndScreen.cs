@@ -15,7 +15,7 @@ namespace Game2
         public string EndTitle { get; private set; }
         private Texture2D BackgroundTexture { get; set; }
         public SpriteBatch SpriteBatch { get; private set; }
-        public bool isActive { get; set; }
+        public bool IsActive { get; set; }
         public int Score { get; set; }
         public string ScoreText { get; set; }
 
@@ -25,11 +25,10 @@ namespace Game2
             GameFont2 = gameFonts[1];
             BackgroundTexture = backgroundTexture;
             SpriteBatch = spriteBatch;
-            // PositionCamera = positionCamera;
             Score = score;
             EndTitle = "The end has been reached! \n\nYou succesfully managed \n to rescue the princess!";
             ScoreText = "Total coins collected: " + score;
-            isActive = false;
+            IsActive = false;
         }
 
         public void Draw()

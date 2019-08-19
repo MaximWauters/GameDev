@@ -17,14 +17,12 @@ namespace Game2
 
         // animatie
         private Texture2D currentAnim { get; set; }
-        private Animation animation;
-
-        private HeroAnimation  heroAnim {get;set;}
+        private ObjectAnimation  heroAnim {get;set;}
         // 
 
         public Hero(Animation animation, Vector2 position, SpriteBatch sprite) : base(animation, position)
         {
-            //heroAnim = new HeroAnimation()
+
         }
 
         public void Update(GameTime gameTime)
@@ -39,17 +37,14 @@ namespace Game2
             if (Animation != null)
             {
                 Animation.Position = Position;
-                if (IsHalted) Animation.SetRunDirection(Animation.runDirection.Front);
+                if (IsHalted) Animation.SetRunDirection(Animation.FrameDirection.Front);
                 Animation.Update(gameTime, Position);
             }
         }
 
         public void CheckPossibleMovement()  // als je in een trap valt bv
         {
-            if (Position.Y > 2000)
-            {
-                Position = new Vector2(70, 100);
-            }
+            if (Position.Y > 2000) Position = new Vector2(70, 100);
         }
 
         public bool IsOnFirmGround()
@@ -62,8 +57,8 @@ namespace Game2
         protected override void StopMovingIfBlocked()
         {
             Vector2 lastMovement = Position - oldPosition;
-            if (lastMovement.X == 0) { Movement *= Vector2.UnitY; }
-            if (lastMovement.Y == 0) { Movement *= Vector2.UnitX; }
+            if (lastMovement.X == 0) Movement *= Vector2.UnitY;
+            if (lastMovement.Y == 0) Movement *= Vector2.UnitX;
         }
 
         protected override void AffectWithGravity()
@@ -81,16 +76,12 @@ namespace Game2
         private void CheckKeyboardAndUpdateMovement(GameTime gameTime)
         {
             KeyboardState keyboardState = Keyboard.GetState();
-            if (!keyboardState.IsKeyDown(Keys.Left) || !keyboardState.IsKeyDown(Keys.Left)) { Animation.SetRunDirection(Animation.runDirection.Front); }
-            if (keyboardState.IsKeyDown(Keys.Left)) { Movement -= Vector2.UnitX * 0.8f; Animation.SetRunDirection(Animation.runDirection.Left); }
-            if (keyboardState.IsKeyDown(Keys.Right)) { Movement += Vector2.UnitX * 0.8f; Animation.SetRunDirection(Animation.runDirection.Right); }
+            if (!keyboardState.IsKeyDown(Keys.Left) || !keyboardState.IsKeyDown(Keys.Left)) { Animation.SetRunDirection(Animation.FrameDirection.Front); }
+            if (keyboardState.IsKeyDown(Keys.Left)) { Movement -= Vector2.UnitX * 0.8f; Animation.SetRunDirection(Animation.FrameDirection.Left); }
+            if (keyboardState.IsKeyDown(Keys.Right)) { Movement += Vector2.UnitX * 0.8f; Animation.SetRunDirection(Animation.FrameDirection.Right); }
             if (keyboardState.IsKeyDown(Keys.Space) && IsOnFirmGround())
             {
-                if (!keyboardOldState.IsKeyDown(Keys.Space))
-                {
-                    Movement = -Vector2.UnitY * 24;         // jump height
-                    //isMoving = true;
-                }
+                if (!keyboardOldState.IsKeyDown(Keys.Space)) Movement = -Vector2.UnitY * 24;         // jump height
             }
             else if (keyboardOldState.IsKeyDown(Keys.Space)) { }  // Key was down last update, but not now, so it has just been released
             keyboardOldState = keyboardState;

@@ -11,18 +11,12 @@ namespace Game2
 {
     class MovingGameObject : Sprite
     {
-        private Vector2 oldPosition;
+        private Vector2 OldPosition;
         public Vector2 Movement { get; set; }
-        //public static MovingGameObject Hero { get; private set; }
         public bool IsHalted { get; private set; }
-        /*
-        public MovingGameObject(Texture2D texture, Vector2 position, SpriteBatch spriteBatch) : base(texture, spriteBatch, position)
-        { }
-        */
+ 
         public MovingGameObject(Animation animation, Vector2 position) : base(animation, position)
-        {
-           // Hero = this;
-        }
+        { }
 
         public static bool IsOnFirmGround(Rectangle bounds)
         {
@@ -33,24 +27,24 @@ namespace Game2
 
         protected virtual void StopMovingIfBlocked()
         {
-            Vector2 lastMovement = Position - oldPosition;
-            if (lastMovement.X == 0) { Movement *= Vector2.UnitY; }
-            if (lastMovement.Y == 0) { Movement *= Vector2.UnitX; }
+            Vector2 lastMovement = Position - OldPosition;
+            if (lastMovement.X == 0) Movement *= Vector2.UnitY; 
+            if (lastMovement.Y == 0) Movement *= Vector2.UnitX; 
         }
 
         protected virtual void AffectWithGravity() { Movement += Vector2.UnitY * .65f; }
 
-        protected void MoveAsFarAsPossible(GameTime gameTime)
+        protected void MoveAsFarAsPossible(GameTime gameTime)               
         {
-            oldPosition = Position;
+            OldPosition = Position;
             UpdatePositionBasedOnMovement(gameTime);
-            Position = Level.CurrentBoard.WhereCanIGetTo(oldPosition, Position, Bounds);
+            Position = Level.CurrentBoard.WhereCanIGetTo(OldPosition, Position, Bounds);
         }
 
         protected virtual void SimulateFriction()
         {
-            if (IsOnFirmGround(Bounds)) { Movement *= Vector2.One * .92f; }    // Slow down jumper 92% per update cycle
-            else { Movement *= Vector2.One * 0.98f; }                               // Slow down jumper 98% per update cycle
+            if (IsOnFirmGround(Bounds)) Movement *= Vector2.One * .92f;     // Slow down hero 92% per update cycle
+            else Movement *= Vector2.One * 0.98f;                           // Slow down hero 98% per update cycle
         }
         
         private void UpdatePositionBasedOnMovement(GameTime gameTime)

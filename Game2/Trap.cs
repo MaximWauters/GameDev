@@ -24,10 +24,10 @@ namespace Game2
             if (Animation != null)
             {
                 Animation.Position = Position;
-                Animation.SetRunDirection(Animation.runDirection.Front);
+                Animation.SetRunDirection(Animation.FrameDirection.Front);
                 Animation.Update(gameTime, Position);
             }
-            if (Position.Y > 800)
+            if (Position.Y > 800)           // als trap van het scherm af is reset dan deze trap op dezelfde locatie
             { 
                 Animation.Position = new Vector2(Position.X, -500);
                 Position = new Vector2(Position.X, -500);

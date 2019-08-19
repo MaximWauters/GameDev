@@ -10,6 +10,10 @@ namespace Game2
 {
     public class Camera2d
     {
+        public Vector2 Position { get; set; }
+        public Vector2 Origin { get; set; }
+        public float Rotation { get; set; }
+        public float Zoom { get; set; }
         private readonly Viewport _viewport;
 
         public Camera2d(Viewport viewport)
@@ -23,16 +27,8 @@ namespace Game2
 
         public Vector2 ViewportCenter
         {
-            get
-            {
-                return new Vector2(_viewport.Width * 0.5f, _viewport.Height * 0.5f);
-            }
+            get { return new Vector2(_viewport.Width * 0.5f, _viewport.Height * 0.5f); }
         }
-
-        public Vector2 Position { get; set; }
-        public float Rotation { get; set; }
-        public float Zoom { get; set; }
-        public Vector2 Origin { get; set; }
 
         public Matrix GetViewMatrix()
         {

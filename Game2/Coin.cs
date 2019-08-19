@@ -10,17 +10,9 @@ namespace Game2
 {
     class Coin : MovingGameObject
     {
-        //public Vector2 Position { get; set; }
-        public float Speed { get; set; }
-        public Animation Anim { get; set; }
-        public int Score { get; set; }
-
-        public Coin(Animation anim, Vector2 position, SpriteBatch spriteBatch, float speed) : base(anim, position)
+        public Coin(Animation anim, Vector2 position, SpriteBatch spriteBatch, float speed = 300) : base(anim, position)
         {
-            Anim = anim;
             Position = position;
-            Speed = speed;
-            Score = 0;
         }
 
         public void Update(GameTime gameTime, Hero player)
@@ -28,7 +20,7 @@ namespace Game2
             if (Animation != null)
             {
                 Animation.Position = Position;
-                Animation.SetRunDirection(Animation.runDirection.Front);
+                Animation.SetRunDirection(Animation.FrameDirection.Front);
                 Animation.Update(gameTime, Position);
             }
         }

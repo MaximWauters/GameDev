@@ -11,10 +11,8 @@ namespace Game2
 {
     class Menu
     {
-        public List<MenuItem> MenuItems { get; private set; }
+        private List<MenuItem> MenuItems { get; set; }
         public List<MenuItem> ControlsItems { get; private set; }
-
-        //public KeyboardKeys ks { get; set; }
 
         public Vector2 MenuItemPos
         {
@@ -27,32 +25,32 @@ namespace Game2
             set { _controlsItemPos = value; }
         }
         private Vector2 _controlsItemPos;
-        private Vector2 _menuItemPos; // hoort bij bovenstaande get en set ofc...
+        private Vector2 _menuItemPos;
 
-        public SpriteFont GameFont { get; private set; }
-        public SpriteFont GameFont2 { get; private set; }
+        public SpriteFont TitleFont { get; private set; }
+        public SpriteFont DescriptionFont { get; private set; }
 
         public Texture2D BackgroundTexture { get; private set; }
         public SpriteBatch SpriteBatch { get; private set; }
         public KeyboardState OldKeyboardState { get; private set; }
-        public bool IsActive { get; set; }
+
         public int Selection { get; private set; }
         public string MenuTitle { get; private set; }
         public string Footer { get; private set; }
         public string Description { get; private set; }
-
+        public bool IsActive { get; set; }
         public Vector2 TitlePos { get; private set; }
         public Vector2 DescriptionPos { get; private set; }
         public Vector2 FooterPos { get; private set; }
         public Vector2 ControlsPos { get; private set; }
 
-        public Menu(SpriteFont[] gameFonts, Texture2D backgroundTexture, SpriteBatch spriteBatch)
+        public Menu(SpriteFont[] menuFonts, Texture2D backgroundTexture, SpriteBatch spriteBatch)
         {
             BackgroundTexture = backgroundTexture;
             SpriteBatch = spriteBatch;
 
-            GameFont = gameFonts[0];
-            GameFont2 = gameFonts[1];
+            TitleFont = menuFonts[0];
+            DescriptionFont = menuFonts[1];
 
             IsActive = true;
 
@@ -64,15 +62,13 @@ namespace Game2
             FooterPos = new Vector2(50, 750);
             DescriptionPos = new Vector2(410, 120);
 
-            
+            MenuItem _playGame = new MenuItem("Play Game", TitleFont, SpriteBatch);
+            MenuItem _options = new MenuItem("Controls", TitleFont, SpriteBatch);
+            MenuItem _exitGame = new MenuItem("Exit", TitleFont, SpriteBatch);
 
-            MenuItem _playGame = new MenuItem("Play Game", GameFont, spriteBatch);
-            MenuItem _options = new MenuItem("Controls", GameFont, spriteBatch);
-            MenuItem _exitGame = new MenuItem("Exit", GameFont, spriteBatch);
-
-            MenuItem _space = new MenuItem("Space Bar = Jump", GameFont, spriteBatch);
-            MenuItem _right = new MenuItem("Right Arrow = Go Right", GameFont, spriteBatch);
-            MenuItem _left = new MenuItem("Left Arrow = Go Left", GameFont, spriteBatch);
+            MenuItem _space = new MenuItem("Space Bar = Jump", TitleFont, SpriteBatch);          // kon evt ook met string
+            MenuItem _right = new MenuItem("Right Arrow = Go Right", TitleFont, SpriteBatch);
+            MenuItem _left = new MenuItem("Left Arrow = Go Left", TitleFont, SpriteBatch);
 
             MenuItems = new List<MenuItem>();
             ControlsItems = new List<MenuItem>();
@@ -89,7 +85,6 @@ namespace Game2
         public void Update(GameTime gameTime)
         {
             KeyboardState ks = Keyboard.GetState();
-            //KeyboardState prevKs = Keyboard.GetState();
 
             if (ks.IsKeyDown(Keys.Up) && !OldKeyboardState.Equals(ks))
             {
@@ -122,13 +117,14 @@ namespace Game2
         public void PositionMenuItems()
         {
             int marge = 0;
+            int topOffset = 100;
 
             foreach (MenuItem item in MenuItems)
             {
-                marge += 100;
+                marge += 120;
 
                 _menuItemPos.X = 50;
-                _menuItemPos.Y = (120 + marge);
+                _menuItemPos.Y = (topOffset + marge);
 
                 item.Position = MenuItemPos; 
             }
@@ -137,12 +133,13 @@ namespace Game2
         public void PositionControls()
         {
             int marge = 0;
+            int topOffset = 300;
 
             foreach (MenuItem item in ControlsItems)
             {
                 marge += 60;
                 _controlsItemPos.X = 320;
-                _controlsItemPos.Y = (300 + marge);
+                _controlsItemPos.Y = (topOffset + marge);
 
                 item.Position = ControlsItemPos;
             }
@@ -159,9 +156,9 @@ namespace Game2
             {
                 Rectangle _backgroundRect = new Rectangle(0, 0, Game1.landscape.GraphicsDevice.Viewport.Width, Game1.landscape.GraphicsDevice.Viewport.Height);
                 SpriteBatch.Draw(BackgroundTexture, _backgroundRect, Color.WhiteSmoke);
-                SpriteBatch.DrawString(GameFont, MenuTitle, TitlePos, Color.Orange);
-                SpriteBatch.DrawString(GameFont2, Description, DescriptionPos, Color.Aquamarine);
-                SpriteBatch.DrawString(GameFont2, Footer, FooterPos, Color.Orange);
+                SpriteBatch.DrawString(TitleFont, MenuTitle, TitlePos, Color.Orange);
+                SpriteBatch.DrawString(DescriptionFont, Description, DescriptionPos, Color.Aquamarine);
+                SpriteBatch.DrawString(DescriptionFont, Footer, FooterPos, Color.Orange);
             }
 
             if (Selection == 1)

@@ -19,8 +19,11 @@ namespace Game2
 
         public void Draw(SpriteBatch spritebatch)
         {
-            Rectangle destinationRect = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
-            SpriteBatch.Draw(Texture, destinationRect, Color.White);  
+            if (IsBlocked)
+            {
+                Rectangle destinationRect = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
+                SpriteBatch.Draw(Texture, destinationRect, Color.White);
+            }
         }
     }
 }

@@ -10,15 +10,11 @@ namespace Game2
 {
     class Enemy : MovingGameObject
     {
-        //public int WalkingTime { get; private set; }
         public float Speed { get; set; }
-        //public int Width { get; private set; }
-        //public int Height { get; private set; }
 
         public Enemy(Animation animation, Vector2 position, SpriteBatch spritebatch, float speed = 0.4f): base(animation, position)
         {
             Speed = speed;
-            Movement += Vector2.UnitX * Speed;
         }
 
         public void Update(GameTime gameTime, Hero player)
@@ -32,7 +28,7 @@ namespace Game2
             if (Animation != null)
             {
                 Animation.Position = Position;
-                if (IsHalted) Animation.SetRunDirection(Animation.runDirection.Front);
+                if (IsHalted) Animation.SetRunDirection(Animation.FrameDirection.Front);
                 Animation.Update(gameTime, Position);
             }
             Collision(player);
@@ -48,10 +44,10 @@ namespace Game2
             if (Movement.X == 0)
             {
                 Speed *= -1;
-                Animation.SetRunDirection(Animation.runDirection.Right);
+                Animation.SetRunDirection(Animation.FrameDirection.Right);
             } else if (Movement.X < 0)
             {
-                Animation.SetRunDirection(Animation.runDirection.Front);
+                Animation.SetRunDirection(Animation.FrameDirection.Front);
             }
         }
     }

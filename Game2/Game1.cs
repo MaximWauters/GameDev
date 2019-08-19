@@ -16,7 +16,10 @@ namespace Game2
         public static Game1 landscape { get; set; }
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D _tileTexture, _jumperTexture, _tile2Texture, _enemyTexture, _flamesTexture, _menuBackground, _endScreenBackground,_finishTexture, _backTexture, _backTexture2, _coinTexture, _coinScoreTexture, _asunaTexture, _asunaTexture2;
+        private Texture2D _orangeTileTexture, _heroTexture, _greenTileTexture, _enemyTexture, _flamesTexture, _menuBackground, _endScreenBackground,_finishTexture, _backTexture, _backTexture2, _coinTexture, _coinScoreTexture, _asunaTexture, _asunaTexture2;
+        private Texture2D[] _blokkenVoorLevel;
+        private Vector2[] _enemyPositonsLvl1, _enemyPositonsLvl2;
+        private Vector2[] _trapPositons;
         private Camera2d _camera;
         private Hero _hero;
         private Coin _Coin, _Coin2, _Coin3, _Coin4, _Coin5, _Coin6;
@@ -26,8 +29,8 @@ namespace Game2
         private Animation _heroAnimation, _coinAnimation, _coinAnimation2, _coinAnimation3, _coinAnimation4, _coinAnimation5, _coinAnimation6;
         private Menu _menu { get; set; }
         private EndScreen _theEnd { get; set; }
-        private SpriteFont _font1, _font2;
-        private SpriteFont[] menuFonts = new SpriteFont[2];
+        private SpriteFont _titleFont, _descriptionFont;
+        private SpriteFont[] _menuFonts;
         public SoundEffect sound { get; private set; }
         public Song themeSong;
         public int lvl = 1;
@@ -37,7 +40,37 @@ namespace Game2
         List<Trap> Traps = new List<Trap>();
         List<Coin> Coins = new List<Coin>();
 
-        public bool ShouldRestartGame { get; set; }
+        public byte[,] _tileArrayLvl1 = new byte[,]  // tile map level 1 ( GUI for level design possible? :) )
+        {
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,2,2,0,0,0,0,2,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,2,2,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,0,0,0,0,2,2,1,0,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,0,0,0,0,2,2,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1 },
+            { 1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2,0,0,0,0,2,2,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,2,2,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,1 },
+            { 1,0,0,1,1,1,0,0,1,1,0,0,0,0,0,0,0,2,2,2,2,0,0,0,0,0,0,0,0,0,0,1,1,2,2,0,0,0,0,2,2,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1 },
+            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1 },
+        };
+
+        public byte[,] _tileArrayLvl2 = new byte[,]  // tile map level 2
+        {
+            { 1,1,1,1,1,1,1,1,1,1,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,2,2,2,0,2,1,1,1,1,1,1,1,1 },
+            { 1,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,2,0,2,0,0,0,0,0,0,0,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,2,0,2,0,0,0,0,0,0,0,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
+            { 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
+            { 1,1,1,1,1,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,2,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1 },
+            { 1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,2,0,0,0,1,1,1,1,1,1,1,1 },
+        };
 
         public Game1()
         {
@@ -59,7 +92,6 @@ namespace Game2
         {
             // TODO: Add your initialization logic here
             _camera = new Camera2d(GraphicsDevice.Viewport);
-            //_Coin.Score = 0;    // score klasse?
             base.Initialize();
         }
 
@@ -73,9 +105,9 @@ namespace Game2
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            _tileTexture = Content.Load<Texture2D>("Brick_Block1");
-            _tile2Texture = Content.Load<Texture2D>("groen2");
-            _jumperTexture = Content.Load<Texture2D>("kiri4");
+            _orangeTileTexture = Content.Load<Texture2D>("Brick_Block1");
+            _greenTileTexture = Content.Load<Texture2D>("groen2");
+            _heroTexture = Content.Load<Texture2D>("kiri4");
             _enemyTexture = Content.Load<Texture2D>("enemy2");
             _flamesTexture = Content.Load<Texture2D>("flames4");
             _menuBackground = Content.Load<Texture2D>("bk1");
@@ -88,16 +120,12 @@ namespace Game2
             _asunaTexture = Content.Load<Texture2D>("Asuna2");
             _asunaTexture2 = Content.Load<Texture2D>("Asuna3");
 
-            _font1 = Content.Load<SpriteFont>("menuTitle");
-            _font2 = Content.Load<SpriteFont>("Description");
+            _titleFont = Content.Load<SpriteFont>("menuTitle");
+            _descriptionFont = Content.Load<SpriteFont>("Description");
             _debugFont = Content.Load<SpriteFont>("DebugFont2");
 
-            menuFonts[0] = _font1;
-            menuFonts[1] = _font2;
-
-            //menuFonts = { _font1, _font2}  list?
-
-            _menu = new Menu(menuFonts, _menuBackground, _spriteBatch);
+            _menuFonts = new SpriteFont[] { _titleFont, _descriptionFont };
+            _menu = new Menu(_menuFonts, _menuBackground, _spriteBatch);
 
             sound = Content.Load<SoundEffect>("coinCollect1");
 
@@ -110,19 +138,24 @@ namespace Game2
             _asuna1 = new Finish(_asunaTexture, _spriteBatch, new Vector2(6280, 475), 1.7f);
             _asuna2 = new Finish(_asunaTexture2, _spriteBatch, new Vector2(6280, 475), 1.7f);
 
-            _coinAnimation6 = new HeroAnimation(_coinTexture, _spriteBatch, new Vector2(2880, 540), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
-            _coinAnimation5 = new HeroAnimation(_coinTexture, _spriteBatch, new Vector2(1800, 600), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
-            _coinAnimation4 = new HeroAnimation(_coinTexture, _spriteBatch, new Vector2(1500, 600), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
-            _coinAnimation = new HeroAnimation(_coinTexture, _spriteBatch, new Vector2(1411, 165), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
-            _coinAnimation2 = new HeroAnimation(_coinTexture, _spriteBatch, new Vector2(845, 290), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
-            _coinAnimation3 = new HeroAnimation(_coinTexture, _spriteBatch, new Vector2(250, 480), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
+            _coinAnimation6 = new ObjectAnimation(_coinTexture, _spriteBatch, new Vector2(2880, 540), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
+            _coinAnimation5 = new ObjectAnimation(_coinTexture, _spriteBatch, new Vector2(1800, 600), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
+            _coinAnimation4 = new ObjectAnimation(_coinTexture, _spriteBatch, new Vector2(1500, 600), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
+            _coinAnimation = new ObjectAnimation(_coinTexture, _spriteBatch, new Vector2(1411, 165), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
+            _coinAnimation2 = new ObjectAnimation(_coinTexture, _spriteBatch, new Vector2(845, 290), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
+            _coinAnimation3 = new ObjectAnimation(_coinTexture, _spriteBatch, new Vector2(250, 480), 130, 150, 6, 90, Color.WhiteSmoke, .5f, true, 1, new int[] { 0, 0, 0, 0 }, 0);
 
-            CreateCoins();
-
-            _heroAnimation = new HeroAnimation(_jumperTexture, _spriteBatch, new Vector2(70, 100), 40, 65, 4, 90, Color.WhiteSmoke, 1.4f, true, 4, new int[] { 0, 0, 0, 0 }, 0);
+            _heroAnimation = new ObjectAnimation(_heroTexture, _spriteBatch, new Vector2(70, 100), 40, 65, 4, 90, Color.WhiteSmoke, 1.4f, true, 4, new int[] { 0, 0, 0, 0 }, 0);
             _hero = new Hero(_heroAnimation, new Vector2(70, 100), _spriteBatch);
 
-            _level1 = new Level(_spriteBatch, _tileTexture, _tile2Texture, _enemyTexture, _flamesTexture, 1);
+            _blokkenVoorLevel = new Texture2D[] { _orangeTileTexture, _greenTileTexture };
+            _enemyPositonsLvl1 = new Vector2[] { new Vector2(1400, 550), new Vector2(2800, 160) };
+            _enemyPositonsLvl2 = new Vector2[] { new Vector2(900, 550), new Vector2(4450, 550) };
+            _trapPositons = new Vector2[] { new Vector2(5500, 400), new Vector2(700, 400), new Vector2(5750, 400) };
+
+            _level1 = new Level(_spriteBatch, _blokkenVoorLevel, _tileArrayLvl1, _enemyTexture, _enemyPositonsLvl1, _flamesTexture, _trapPositons, 1);
+
+            CreateCoins();
         }
 
         void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
@@ -153,59 +186,46 @@ namespace Game2
                 Exit();
 
             // TODO: Add your update logic here
-            if (_menu.IsActive == true) _menu.Update(gameTime);
+            if (_menu.IsActive) _menu.Update(gameTime);
 
-            //camPos.X = 70;
             // Zorg ervoor dat als je beweegt & je hero midden van het scherm komt dat je dan pas de x van de camera updatetet
-            //if (_hero.isMoving == (true | false)/* && _hero.Position.X > 600*/)
             if (!_menu.IsActive) camPos.X = _hero.Position.X - 600;
 
             UpdateCoins(gameTime, _hero);   // update animatie coin
-            checkCol(_hero);     // col-det voor coins
-                                 //_theEnd.Update(gameTime);
+            checkCol(_hero);                // col-det voor coins
 
-            //if (!((_hero.Position.X > 6290) && (lvl == 2))) 
-            _hero.Update(gameTime);  // engame guard
+            _hero.Update(gameTime); 
 
             if (lvl == 1)
             {
-                _level1.UpdateTraps(gameTime, _hero);
-                _level1.UpdateEnemies(gameTime, _hero);
+                _level1.Update(gameTime, _hero);
                 _finish.Update(_hero);
             }
             if (lvl == 2)
             {
-                _level2.UpdateTraps(gameTime, _hero);   // afzonderlijk van lvl update pls
-                _level2.UpdateEnemies(gameTime, _hero);
+                _level2.Update(gameTime, _hero);
                 _asuna1.Update(_hero);
                 _asuna2.Update(_hero);
             }
-           
             base.Update(gameTime);
         }
 
-        float rotation = 0;
-        float zoom = 1;
-        Vector2 camPos = new Vector2();
-        
         private void CreateCoins()
         {
-            for (int i = 0; i < 1; i++)
-            {
-                _Coin6 = new Coin(_coinAnimation6, new Vector2(2880, 540), _spriteBatch, 300);
-                _Coin5 = new Coin(_coinAnimation5, new Vector2(1800, 600), _spriteBatch, 300);     
-                _Coin4 = new Coin(_coinAnimation4, new Vector2(1500, 600), _spriteBatch, 300);
-                _Coin = new Coin(_coinAnimation, new Vector2(1411, 165), _spriteBatch, 300);
-                _Coin2 = new Coin(_coinAnimation2, new Vector2(845, 290), _spriteBatch, 300);
-                _Coin3 = new Coin(_coinAnimation3, new Vector2(250, 480), _spriteBatch,300);
+            _Coin6 = new Coin(_coinAnimation6, new Vector2(2880, 540), _spriteBatch);
+            _Coin5 = new Coin(_coinAnimation5, new Vector2(1800, 600), _spriteBatch);     
+            _Coin4 = new Coin(_coinAnimation4, new Vector2(1500, 600), _spriteBatch);
+            _Coin = new Coin(_coinAnimation, new Vector2(1411, 165), _spriteBatch);
+            _Coin2 = new Coin(_coinAnimation2, new Vector2(845, 290), _spriteBatch);
+            _Coin3 = new Coin(_coinAnimation3, new Vector2(250, 480), _spriteBatch);
 
-                Coins.Add(_Coin6);
-                Coins.Add(_Coin5);              
-                Coins.Add(_Coin4);
-                Coins.Add(_Coin);
-                Coins.Add(_Coin2);
-                Coins.Add(_Coin3);
-            }
+            Coins.Add(_Coin6);
+            Coins.Add(_Coin5);              
+            Coins.Add(_Coin4);
+            Coins.Add(_Coin);
+            Coins.Add(_Coin2);
+            Coins.Add(_Coin3);
+            
         }
 
         private void UpdateCoins(GameTime gameTime, Hero player)
@@ -231,6 +251,9 @@ namespace Game2
             }
         }
 
+        float rotation = 0;
+        float zoom = 1;
+        Vector2 camPos = new Vector2();
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -256,31 +279,31 @@ namespace Game2
                 if (_finish.Win == true)
                 {
                     lvl = 2;
-                    _level2 = new Level(_spriteBatch, _tileTexture, _tile2Texture, _enemyTexture, _flamesTexture, 2);
+                    _level2 = new Level(_spriteBatch, _blokkenVoorLevel, _tileArrayLvl2, _enemyTexture, _enemyPositonsLvl2, _flamesTexture, _trapPositons, 2);
                     _hero.Position = new Vector2(70, 100);
                     _hero.Movement = Vector2.Zero;
-                    Coins.Clear();
                     _finish.Win = false;
+                    Coins.Clear();
                 }
                 else if (!_finish.Win == true && lvl == 1)
                 {
                     DrawBackground(_backTexture);
                     _level1.Draw(_spriteBatch);
+                    _hero.Draw();
+                    _finish.Draw();
+                    DrawCoins();
                     WriteDebugInfo();
                     DrawScore();
-                    _finish.Draw();
-                    _hero.Draw();
-                    DrawCoins();
                 }
                 else if (_hero.Position == Vector2.Zero) _theEnd.Draw();
                 else if (!_finish.Win == true && lvl == 2)
                 {
                     DrawBackground(_backTexture2);
                     _level2.Draw(_spriteBatch);
-                    WriteDebugInfo();
-                    DrawScore();
                     _hero.Draw();
                     _asuna1.Draw();
+                    WriteDebugInfo();
+                    DrawScore();
                     if (_asuna1.Win == true && canDraw == false)
                     {
                         _asuna2.Draw();
@@ -289,14 +312,13 @@ namespace Game2
                 }
                 if (_asuna2.Win == true && canDraw == true && _hero.Position.X > 6270)
                 {
-                    Console.WriteLine("jeps");
-                    System.Threading.Thread.Sleep(3000);
+                    System.Threading.Thread.Sleep(2000);    // let the game sleep for 2 sec to ensure to player that the end has been reached.
                     _hero.Position = Vector2.Zero;
                     _camera.Position = Vector2.Zero;
-                    GraphicsDevice.Clear(Color.WhiteSmoke);
+                    //GraphicsDevice.Clear(Color.WhiteSmoke);
 
-                    _theEnd = new EndScreen(menuFonts, score, _endScreenBackground, _spriteBatch);
-                    _theEnd.isActive = true;
+                    _theEnd = new EndScreen(_menuFonts, score, _endScreenBackground, _spriteBatch);
+                    _theEnd.IsActive = true;
                 }
             }
             _spriteBatch.End();
@@ -317,7 +339,7 @@ namespace Game2
             string scoreText = string.Format("{0}x", score);
             Rectangle destRect = new Rectangle((int)(camPos.X + 1430), 70, 50, 50);
 
-            _spriteBatch.DrawString(_font1, scoreText, new Vector2(camPos.X + 1330, 55), Color.Orange);
+            _spriteBatch.DrawString(_titleFont, scoreText, new Vector2(camPos.X + 1330, 55), Color.Orange);
             _spriteBatch.Draw(_coinScoreTexture, destRect, Color.WhiteSmoke);
         }
         

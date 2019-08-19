@@ -52,7 +52,7 @@
     <Compile Include="SolidGameObject.cs" />
     <Compile Include="GroenBlok.cs" />
     <Compile Include="Hero.cs" />
-    <Compile Include="HeroAnimation.cs" />
+    <Compile Include="ObjectAnimation.cs" />
     <Compile Include="KeyboardKeys.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuItem.cs" />

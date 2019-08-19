@@ -9,144 +9,91 @@ using System.Threading.Tasks;
 namespace Game2
 {
     class Level
-    {                                          // init de enemies hier ook zodat bij het aanmaken van het level de enemies erin zitten!
-        public Blok[,] Blokken { get; set; }   // klasse groen blok is niet nodig omdat je simpelweg de texture in een blok kan aanpassen
+    {                                          
+        private Blok[,] Blokken { get; set; }
+        private byte[,] TileArray { get; set; }
+        private Vector2[] EnemyPositions { get; set; }
+        private Vector2[] TrapPositions { get; set; }
+        private SpriteBatch SpriteBatch { get; set; }
 
-        public Trap Trap1Lvl1 { get; set; } // doe hetzelfde voor traps als blok!
-        public Trap Trap1Lvl2 { get; set; }
-        public Trap Trap2Lvl2 { get; set; }
-        public Trap Trap3Lvl2 { get; set; }
-
-        public HeroAnimation trapAnimation {get; set;}
-        public HeroAnimation trapAnimation2 { get; set; }
-        public HeroAnimation trapAnimation3 { get; set; }
-
-        private Enemy enemy1 { get; set; }
-        private Enemy enemy2 { get; set; }
-        private HeroAnimation enemy1Animation { get; set; }
-        private HeroAnimation enemy2Animation { get; set; }
-        private HeroAnimation enemy1Animation2 { get; set; }
-        private HeroAnimation enemy2Animation2 { get; set; }
+        private Texture2D OrangeTileTexture, GreenTileTexture, EnemyTexture, TrapTexture;
+        private ObjectAnimation EnemyAnimation, TrapAnimation, TrapAnimation2, TrapAnimation3;
+        private Enemy Enemy1, Enemy2;
+        private Trap Trap1, Trap1Lvl2, Trap2Lvl2, Trap3Lvl2;               
 
         private readonly int Columns = 100;
         private readonly int Rows = 12;
 
-        public Texture2D TileTexture { get; set; }
-        public Texture2D Tile2Texture { get; set; }
-        public Texture2D _enemyTexture { get; set; }
-        public Texture2D _trapTexture { get; set; }
+        private List<Trap> Traps = new List<Trap>();
+        private List<Enemy> Enemies = new List<Enemy>();
 
-        public SpriteBatch SpriteBatch { get; set; }
         public static Level CurrentBoard { get; private set; }
         public int LevelNr { get; set; }
 
-        public List<Trap> traps = new List<Trap>();
-        private List<Enemy> enemies = new List<Enemy>();
-
-        public Level(SpriteBatch spritebatch, Texture2D tileTexture, Texture2D tile2Texture, Texture2D enemyTexture, Texture2D trapTexture, int levelNr)
+        public Level(SpriteBatch spritebatch, Texture2D[] tileTextures, byte[,] tileArray, Texture2D enemyTexture, Vector2[] enemyPositions, Texture2D trapTexture, Vector2[] trapPositions, int levelNr)
         {
-            TileTexture = tileTexture; // array pls
+            OrangeTileTexture = tileTextures[0];
+            GreenTileTexture = tileTextures[1];
             SpriteBatch = spritebatch;
-            Tile2Texture = tile2Texture;
-            _enemyTexture = enemyTexture;
-            _trapTexture = trapTexture;
+            TileArray = tileArray;
+            EnemyTexture = enemyTexture;
+            EnemyPositions = enemyPositions;
+            TrapTexture = trapTexture;
+            TrapPositions = trapPositions;
             LevelNr = levelNr;
 
             Blokken = new Blok[Columns, Rows];
 
-            enemy1Animation = new HeroAnimation(_enemyTexture, spritebatch, new Vector2(900, 550), 70, 65, 8, 200, Color.WhiteSmoke, 1.4f, true, 2, new int[] { 0, 20, 20, 0 }, 0);
-            enemy2Animation = new HeroAnimation(_enemyTexture, spritebatch, new Vector2(4450, 550), 70, 65, 8, 200, Color.WhiteSmoke, 1.4f, true, 2, new int[] { 0, 20, 20, 0 }, 0);
-            enemy1Animation2 = new HeroAnimation(_enemyTexture, spritebatch, new Vector2(2000, 160), 70, 65, 8, 200, Color.WhiteSmoke, 1.4f, true, 2, new int[] { 0, 20, 20, 0 }, 0);
-            enemy2Animation2 = new HeroAnimation(_enemyTexture, spritebatch, new Vector2(2800, 160), 70, 65, 8, 200, Color.WhiteSmoke, 1.4f, true, 2, new int[] { 0, 20, 20, 0 }, 0);
+            Enemies.Add(Enemy1);
+            Enemies.Add(Enemy2);
+            Traps.Add(Trap1);
 
-            trapAnimation = new HeroAnimation(_trapTexture, spritebatch, new Vector2(700, 400), 120, 400, 6, 60, Color.WhiteSmoke, .7f, true, 1, new int[] { 0, 0, 0, 0, 0, 0 }, 0);
-            trapAnimation2 = new HeroAnimation(_trapTexture, spritebatch, new Vector2(5500, 400), 120, 400, 6, 60, Color.WhiteSmoke, .7f, true, 1, new int[] { 0, 0, 0, 0, 0, 0 }, 0);
-            trapAnimation3 = new HeroAnimation(_trapTexture, spritebatch, new Vector2(5750, 400), 120, 400, 6, 60, Color.WhiteSmoke, .7f, true, 1, new int[] { 0, 0, 0, 0, 0, 0 }, 0);
+            TrapAnimation = new ObjectAnimation(TrapTexture, SpriteBatch, TrapPositions[0], 120, 400, 6, 60, Color.WhiteSmoke, .7f, true, 1, new int[] { 0, 0, 0, 0, 0, 0 }, 0);
+            TrapAnimation2 = new ObjectAnimation(TrapTexture, SpriteBatch, TrapPositions[1], 120, 400, 6, 60, Color.WhiteSmoke, .7f, true, 1, new int[] { 0, 0, 0, 0, 0, 0 }, 0);
+            TrapAnimation3 = new ObjectAnimation(TrapTexture, SpriteBatch, TrapPositions[2], 120, 400, 6, 60, Color.WhiteSmoke, .7f, true, 1, new int[] { 0, 0, 0, 0, 0, 0 }, 0);
 
-            MaakLevel1();
+            CreateLevel();
 
-            Level.CurrentBoard = this;
+            CurrentBoard = this;
 
-            if (levelNr == 2)
+            if (levelNr == 2)                // kan zonder levelNr als je traps en enemies meegeeft met Level Object
             {
-                traps.Clear();
-                enemies.Clear();  //clear enemies en traps van vorige level voor je nieuwe level start
-                MaakLevel2();
-                
+                Traps.Clear();               //clear enemies en traps van vorige level voor je nieuwe level start
+                Enemies.Clear();
+                Enemies.Add(Enemy1);
+                Enemies.Add(Enemy2);
+                CreateLevel2();
             }
         }
 
-        public byte[,] tileArray = new byte[,]  // tile map level 1 ( GUI for level design possible? :) )
+        private void CreateLevel()
         {
-            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,2,2,0,0,0,0,2,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,2,2,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,0,0,0,0,2,2,1,0,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,0,0,0,0,2,2,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1 },
-            { 1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2,0,0,0,0,2,2,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,2,2,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,1 },
-            { 1,0,0,1,1,1,0,0,1,1,0,0,0,0,0,0,0,2,2,2,2,0,0,0,0,0,0,0,0,0,0,1,1,2,2,0,0,0,0,2,2,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1 },
-            { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1 },
-        };
-
-        public byte[,] tileArrayLvl2 = new byte[,]  // tile map level 2
-        {
-            { 1,1,1,1,1,1,1,1,1,1,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,2,2,2,0,2,1,1,1,1,1,1,1,1 },
-            { 1,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,2,0,2,0,0,0,0,0,0,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,2,0,2,0,0,0,0,0,0,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
-            { 1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1 },
-            { 1,1,1,1,1,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,2,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1 },
-            { 1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,2,0,0,0,1,1,1,1,1,1,1,1 },
-        };
-
-        private void MaakLevel1()
-        {
-            InitBlokkenVoorLevel();
+            InitBlokkenForLevel();
             ZetBorderTilesBlocked();
-            CreateEnemiesLvl1();
+            CreateEnemies();
             CreateTrapsLvl1();
         }
 
-        public void MaakLevel2()
+        private void CreateLevel2()
         {
-            InitBlokkenVoorLevel();
+            InitBlokkenForLevel();
             ZetBorderTilesBlocked();
-            CreateEnemiesLvl2();
+            CreateEnemies();
             CreateTrapsLvl2();
         }
 
-        private void InitBlokkenVoorLevel()
+        private void InitBlokkenForLevel()
         {
             for (int x = 0; x < Columns; x++)
             {
                 for (int y = 0; y < Rows; y++)
                 {
-                    Vector2 tilePosition = new Vector2(x * TileTexture.Width, y * TileTexture.Height);
-                    Vector2 tile2Position = new Vector2(x * Tile2Texture.Width, y * Tile2Texture.Height);
+                    Vector2 tilePosition = new Vector2(x * OrangeTileTexture.Width, y * OrangeTileTexture.Height);
+                    Vector2 tile2Position = new Vector2(x * GreenTileTexture.Width, y * GreenTileTexture.Height);
 
-                    if (LevelNr == 1) // geef de tile array mee met het level
-                    {
-                        if (tileArray[y, x] == 1) Blokken[x, y] = new Blok(TileTexture, tilePosition, SpriteBatch, true);
-                        
-                        if (tileArray[y, x] == 2) Blokken[x, y] = new Blok(Tile2Texture, tile2Position, SpriteBatch, false);// maak nieuwe klasse met appart blok
-                    }
-                    //
-                    if (LevelNr == 2)
-                    {
-                        if (tileArrayLvl2[y, x] == 1) Blokken[x, y] = new Blok(TileTexture, tilePosition, SpriteBatch, true);
-
-                        if (tileArrayLvl2[y, x] == 2) Blokken[x, y] = new Blok(Tile2Texture, tile2Position, SpriteBatch, true);// maak nieuwe klasse met appart blok
-                    }
-                }
+                    if (TileArray[y, x] == 1) Blokken[x, y] = new Blok(OrangeTileTexture, tilePosition, SpriteBatch, true);
+                    if (TileArray[y, x] == 2) Blokken[x, y] = new Blok(GreenTileTexture, tile2Position, SpriteBatch, true);// maak nieuwe klasse met appart blok
+                }  
             }
         }
 
@@ -156,24 +103,27 @@ namespace Game2
             {
                 for (int i = 0; i < Columns; i++)
                 {
-                   // if (Blokken[i, j] != null && tileArray[j, i] == 2) Blokken[i, j].IsBlocked = false;  // zorg dat je door vast object geraakt
-
                     if (j == 0 || i == 0 || j == Rows - 1 || i == Columns - 1) if (Blokken[i, j] != null) Blokken[i, j].IsBlocked = true;
                 }
             }
         }
-        //  ===== Start Collision logic =====  ( checkt of de hero een blok in het huidige level raakt )
+
+        private void DrawBlokken(SpriteBatch spritebatch)
+        {
+            for (int j = 0; j < Rows; j++)
+            {
+                for (int i = 0; i < Columns; i++)
+                {
+                    if (Blokken[i, j] != null) Blokken[i, j].Draw(spritebatch);
+                }
+            }
+        }
+        //  ===== Start Collision logic =====  ( checkt of de hero een blok in het huidige level raakt ) thanks to https://www.youtube.com/watch?v=P834oA6s6gQ
 
         public bool HasRoomForRectangle(Rectangle rectangleToCheck)
         {
             foreach (Blok blok in Blokken)
             {
-                /*
-                if (blok != null && blok.Bounds.Intersects(rectangleToCheck) && blok.IsBlocked == false)
-                {
-                    return true;
-                }
-                */
                 if (blok != null && blok.Bounds.Intersects(rectangleToCheck))
                 {
                     return false;
@@ -223,71 +173,51 @@ namespace Game2
         }
         //  ===== End Collision logic =====
         //  ===== Start Enemy / trap logic =====
-        public void CreateEnemiesLvl1() //y
+        private void CreateEnemies()
         {
-            Vector2 _enemyPosition = new Vector2(2000, 160);
-            Vector2 _enemy2Position = new Vector2(2800, 160);
-
-            enemy1 = new Enemy(enemy1Animation2, _enemyPosition, SpriteBatch);
-            enemy2 = new Enemy(enemy2Animation2, _enemy2Position, SpriteBatch);
-
-            enemies.Add(enemy1);
-            enemies.Add(enemy2);
-        }
-        public void CreateEnemiesLvl2() 
-        {
-            Vector2 _enemyPosition = new Vector2(900, 550); 
-            Vector2 _enemy2Position = new Vector2(4450, 550);
-
-            enemy1 = new Enemy(enemy1Animation, _enemyPosition, SpriteBatch);
-            enemy2 = new Enemy(enemy2Animation, _enemy2Position, SpriteBatch);
-
-            enemies.Add(enemy1);
-            enemies.Add(enemy2);
+            for (int i = 0; i < Enemies.Count; i++)
+            {
+                EnemyAnimation = new ObjectAnimation(EnemyTexture, SpriteBatch, EnemyPositions[i], 70, 65, 8, 200, Color.WhiteSmoke, 1.4f, true, 2, new int[] { 0, 20, 20, 0 }, 0);
+                Enemies[i] = new Enemy(EnemyAnimation, EnemyPositions[i], SpriteBatch);
+            }
         }
 
-        public void UpdateEnemies(GameTime gt, Hero hero) { foreach (Enemy enemy in enemies) enemy.Update(gt, hero); }
+        public void DrawEnemies() { foreach (Enemy e in Enemies) e.Draw(); }
 
-        public void DrawEnemies() { foreach (Enemy enemy in enemies) enemy.Draw(); }
-
-        public void CreateTrapsLvl1()
+        private void CreateTrapsLvl1()
         {
-            Vector2 _trap1Position = new Vector2(5500, 400);
-
-            Trap1Lvl1 = new Trap(trapAnimation2, _trap1Position, SpriteBatch);
-
-            traps.Add(Trap1Lvl1);
-
-        }
-        public void CreateTrapsLvl2()
-        {
-            Vector2 _trap1Position = new Vector2(700, 400);
-            Vector2 _trap2Position = new Vector2(5500, 400);
-            Vector2 _trap3Position = new Vector2(5750, 400);
-
-            Trap1Lvl2 = new Trap(trapAnimation, _trap1Position, SpriteBatch);
-            Trap2Lvl2 = new Trap(trapAnimation2, _trap2Position, SpriteBatch, 1.4f);
-            Trap3Lvl2 = new Trap(trapAnimation3, _trap3Position, SpriteBatch, 2.5f); // geef laatste trap aangepaste snelheid voor challange effect
-
-            traps.Add(Trap1Lvl2);
-            traps.Add(Trap2Lvl2);
-            traps.Add(Trap3Lvl2);
+            for (int i = 0; i < Traps.Count; i++)
+            {
+                TrapAnimation = new ObjectAnimation(TrapTexture, SpriteBatch, TrapPositions[i], 120, 400, 6, 60, Color.WhiteSmoke, .7f, true, 1, new int[] { 0, 0, 0, 0, 0, 0 }, 0);
+                Traps[i] = new Trap(TrapAnimation, TrapPositions[i], SpriteBatch);
+            }
+            //Trap1Lvl1 = new Trap(trapAnimation2, TrapPositions[0], SpriteBatch);
+            //traps.Add(Trap1Lvl1);
         }
 
-        public void UpdateTraps(GameTime gt, Hero p) { foreach (Trap c in traps) c.Update(gt, p); }
+        private void CreateTrapsLvl2()           // niet 1 methode voor aanmaken traps omdat laatste traps variabele snelheid hebben
+        {
+            Trap1Lvl2 = new Trap(TrapAnimation, TrapPositions[1], SpriteBatch);
+            Trap2Lvl2 = new Trap(TrapAnimation2, TrapPositions[0], SpriteBatch, 1.4f);
+            Trap3Lvl2 = new Trap(TrapAnimation3, TrapPositions[2], SpriteBatch, 2.5f);      // geef laatste trap aangepaste snelheid voor challange effect
 
-        public void DrawTraps() { foreach (Trap t in traps) t.Draw(); }
+            Traps.Add(Trap1Lvl2);
+            Traps.Add(Trap2Lvl2);
+            Traps.Add(Trap3Lvl2);
+        }
+
+        public void Update(GameTime gameTime, Hero hero)
+        {
+            foreach (Trap t in Traps) t.Update(gameTime, hero);
+            foreach (Enemy e in Enemies) e.Update(gameTime, hero);
+        }
+
+        public void DrawTraps() { foreach (Trap t in Traps) t.Draw(); }
         //  ===== End Enemy / trap logic =====
 
         public void Draw(SpriteBatch spritebatch)
         {
-            for (int j = 0; j < Rows; j++)
-            {
-                for (int i = 0; i < Columns; i++)
-                {
-                    if (Blokken[i, j] != null) Blokken[i, j].Draw(spritebatch);
-                }
-            }
+            DrawBlokken(spritebatch);
             DrawEnemies();
             DrawTraps(); 
         }
