@@ -31,10 +31,10 @@ namespace Game2
         private EndScreen _theEnd { get; set; }
         private SpriteFont _titleFont, _descriptionFont;
         private SpriteFont[] _menuFonts;
-        public SoundEffect sound { get; private set; }
-        public Song themeSong;
-        public int lvl = 1;
-        private int score = 0;
+        public SoundEffect _soundEffect { get; private set; }
+        public Song _themeSong;
+        public int _lvl = 1;
+        private int _score = 0;
         
         List<Enemy> Enemies = new List<Enemy>();
         List<Trap> Traps = new List<Trap>();
@@ -127,10 +127,10 @@ namespace Game2
             _menuFonts = new SpriteFont[] { _titleFont, _descriptionFont };
             _menu = new Menu(_menuFonts, _menuBackground, _spriteBatch);
 
-            sound = Content.Load<SoundEffect>("coinCollect1");
+            _soundEffect = Content.Load<SoundEffect>("coinCollect1");
 
-            themeSong = Content.Load<Song>("SAO3_Administrator");
-            MediaPlayer.Play(themeSong);
+            _themeSong = Content.Load<Song>("SAO3_Administrator");
+            MediaPlayer.Play(_themeSong);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
 
@@ -162,7 +162,7 @@ namespace Game2
         {
             // 0.0f is silent, 1.0f is full volume
             MediaPlayer.Volume -= 0.5f;
-            MediaPlayer.Play(themeSong);
+            MediaPlayer.Play(_themeSong);
             MediaPlayer.IsRepeating = true;
         }
 
@@ -196,12 +196,12 @@ namespace Game2
 
             _hero.Update(gameTime); 
 
-            if (lvl == 1)
+            if (_lvl == 1)
             {
                 _level1.Update(gameTime, _hero);
                 _finish.Update(_hero);
             }
-            if (lvl == 2)
+            if (_lvl == 2)
             {
                 _level2.Update(gameTime, _hero);
                 _asuna1.Update(_hero);
@@ -244,8 +244,8 @@ namespace Game2
             {
                 if (Coins[i].Bounds.Intersects(h.Bounds))
                 {
-                    score++;
-                    sound.Play();
+                    _score++;
+                    _soundEffect.Play();
                     Coins.RemoveAt(i);
                 }
             }
@@ -278,14 +278,14 @@ namespace Game2
                 // TODO: Add your drawing code here
                 if (_finish.Win == true)
                 {
-                    lvl = 2;
+                    _lvl = 2;
                     _level2 = new Level(_spriteBatch, _blokkenVoorLevel, _tileArrayLvl2, _enemyTexture, _enemyPositonsLvl2, _flamesTexture, _trapPositons, 2);
                     _hero.Position = new Vector2(70, 100);
                     _hero.Movement = Vector2.Zero;
                     _finish.Win = false;
                     Coins.Clear();
                 }
-                else if (!_finish.Win == true && lvl == 1)
+                else if (!_finish.Win == true && _lvl == 1)
                 {
                     DrawBackground(_backTexture);
                     _level1.Draw(_spriteBatch);
@@ -296,7 +296,7 @@ namespace Game2
                     DrawScore();
                 }
                 else if (_hero.Position == Vector2.Zero) _theEnd.Draw();
-                else if (!_finish.Win == true && lvl == 2)
+                else if (!_finish.Win == true && _lvl == 2)
                 {
                     DrawBackground(_backTexture2);
                     _level2.Draw(_spriteBatch);
@@ -314,10 +314,8 @@ namespace Game2
                 {
                     System.Threading.Thread.Sleep(2000);    // let the game sleep for 2 sec to ensure to player that the end has been reached.
                     _hero.Position = Vector2.Zero;
-                    _camera.Position = Vector2.Zero;
-                    //GraphicsDevice.Clear(Color.WhiteSmoke);
 
-                    _theEnd = new EndScreen(_menuFonts, score, _endScreenBackground, _spriteBatch);
+                    _theEnd = new EndScreen(_menuFonts, _score, _endScreenBackground, _spriteBatch);
                     _theEnd.IsActive = true;
                 }
             }
@@ -336,7 +334,7 @@ namespace Game2
         
         private void DrawScore()
         {
-            string scoreText = string.Format("{0}x", score);
+            string scoreText = string.Format("{0}x", _score);
             Rectangle destRect = new Rectangle((int)(camPos.X + 1430), 70, 50, 50);
 
             _spriteBatch.DrawString(_titleFont, scoreText, new Vector2(camPos.X + 1330, 55), Color.Orange);

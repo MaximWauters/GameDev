@@ -13,7 +13,6 @@ namespace Game2
     {
         private Vector2 oldPosition;
         private KeyboardState keyboardOldState;
-        //public bool isMoving = false;
 
         // animatie
         private Texture2D currentAnim { get; set; }
